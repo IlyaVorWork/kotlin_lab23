@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Lab23</string>
+    <string name="input_placeholder">Введите название репозитория</string>
+    <string name="project_name">Название проекта:</string>
+    <string name="project_author">Автор проекта:</string>
+    <string name="project_lang">Язык программирования:</string>
+</resources>
