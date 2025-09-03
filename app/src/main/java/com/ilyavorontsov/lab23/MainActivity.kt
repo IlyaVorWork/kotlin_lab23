@@ -1,9 +1,11 @@
 package com.ilyavorontsov.lab23
 
+import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.Html
-import android.text.TextWatcher
+import android.text.*
+import android.text.method.LinkMovementMethod
+import android.text.style.ForegroundColorSpan
+import android.text.style.URLSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -64,9 +66,19 @@ class RepositoryAdapter(val repos: MutableList<Repository>) : RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: RepositoryHolder, position: Int) {
 
-        holder.tvProjectName.text = Html.fromHtml("<a href=${repos[position].html_url}>${holder.itemView.context.getString(R.string.project_name)} ${repos[position].name}</a>")
-        holder.tvProjectAuthor.text = Html.fromHtml("<a href=${repos[position].owner.html_url}>${holder.itemView.context.getString(R.string.project_author)} ${repos[position].owner.login}</a>")
-        holder.tvProjectLang.text = "${holder.itemView.context.getString(R.string.project_lang)} ${repos[position].language}"
+        val projectName = SpannableString(String.format(holder.itemView.context.getString(R.string.project_name), repos[position].name))
+        projectName.setSpan(URLSpan(this.repos[position].html_url), 18, projectName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        projectName.setSpan(ForegroundColorSpan(Color.BLUE), 18, projectName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        holder.tvProjectName.text = projectName
+        holder.tvProjectName.movementMethod = LinkMovementMethod.getInstance()
+
+        val projectAuthor = SpannableString(String.format(holder.itemView.context.getString(R.string.project_author), repos[position].owner.login))
+        projectAuthor.setSpan(URLSpan(this.repos[position].owner.html_url), 15, projectAuthor.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        projectAuthor.setSpan(ForegroundColorSpan(Color.BLUE), 15, projectAuthor.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        holder.tvProjectAuthor.text = projectAuthor
+        holder.tvProjectAuthor.movementMethod = LinkMovementMethod.getInstance()
+
+        holder.tvProjectLang.text = String.format(holder.itemView.context.getString(R.string.project_lang), repos[position].language)
         holder.tvProjectDesc.text = repos[position].description
     }
 
